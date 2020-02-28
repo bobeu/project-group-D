@@ -1,4 +1,4 @@
-pragma solidity ^0.6.1;
+pragma solidity ^0.6.0;
 
 contract ConStorage {
 
@@ -20,10 +20,11 @@ contract ConStorage {
   //uint adminId = 2200;
   string msg_1 = "activated";
   string msg_2 = "deactivated";
-  //uint maxAdmin;
+  uint16 maxAdmin;
   uint adminIndex; //for getting the number of admin
   uint instructorIndex = 0;
-  uint assignmentIndex = 0; //for getting assignment.
+  uint assignmentCount; //for getting assignment.
+  bool signed;
 
   struct Students{
       bytes32 f_Name;
@@ -32,7 +33,6 @@ contract ConStorage {
       uint assignmentIndex;
       bool activated;
       bytes32 email;
-      uint16 assignmentCount;
       uint id;
       uint8 rating;
       Grades grade;
@@ -42,48 +42,67 @@ contract ConStorage {
     }
 
   struct Admins{
-    uint id;
-    bool isActivated;
-    bool authorised;
+      bytes32 name;
+      uint id;
+      bool isActivated;
+      bool authorised;
     }
 
   struct Instructor {
-    bytes32 f_name;
-    bytes32 l_name;
-    uint id;
+      bytes32 f_name;
+      bytes32 l_name;
+      uint id;
 
   }
 
   struct Assignment{
-    string link;
-    AssignmentStatus status;
+      uint index;
+      string link;
+      AssignmentStatus status;
   }
 
-  address payable owner;
+  //address payable owner;
 
   Students[] public studentList;
   address[] public adminList;
-  Instructor public instructorlist;
+  Instructor[] instructorList;
   Assignment[] public links;
   string[] public projectLink;
 
 
   mapping(address => Students) internal students; // maps student address to student struct
+  
   mapping(address => Admins) public admins; //maps admin address to admin struct
-  mapping(uint => mapping(address => Admins)) adminReverseMapping; //maps adminIndex of the admins to the address.
+  
+  mapping(uint => mapping(address => Admins)) adminReverseMapping; //maps adminIndex of the admins to the address.]
+  
   mapping(address => Instructor) public instructors; //maps instructor address to its struct
+  
   mapping(uint => address) public instructorCount; //reversemap of instructors address to uint 
+  
   mapping(uint => mapping(address => Students)) studentCount; //maps studentIndex of the admins to the address.
+  
   mapping(uint => Students) indexList;  //maps student email to index
+  
   mapping(bytes32 => Students) public commentList;
+  
   // mapping(bytes32 => bool) public isAdminList;
-  mapping(uint16 => Assignment) assignmentCount;
+  
+  mapping(uint16 => Assignment) assignments;
+  
   mapping(address => bool) public isAdmin;
+  
   mapping(address => bool) public isAStudent;
+  
   mapping(uint => Admins) adminCount;
+  
   mapping(address => uint) public balanceOf; //tracks balances in addresses
+  
   mapping(bytes32 => Students) gsByEm;
+  
     // mapping(address => bool) public isMember;
+    
   mapping(address => mapping(uint => Grades)) grades;
+  
   mapping(address => MemberState)public studentLevel;
 }
